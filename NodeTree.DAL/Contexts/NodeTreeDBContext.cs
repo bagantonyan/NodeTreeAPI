@@ -9,9 +9,14 @@ namespace NodeTree.DAL.Contexts
     {
         public DbSet<TreeNode> TreeNodes { get; set; }
 
+        public DbSet<JournalRecord> JournalRecords { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasSequence<long>("EventId");
+
             modelBuilder.ApplyConfiguration(new TreeNodeConfiguration());
+            modelBuilder.ApplyConfiguration(new JournalRecordConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
