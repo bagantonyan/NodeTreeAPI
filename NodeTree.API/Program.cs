@@ -1,3 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using NodeTree.API.Handlers;
+using NodeTree.BLL.Services;
+using NodeTree.BLL.Services.Interfaces;
+using NodeTree.DAL.Contexts;
+using NodeTree.DAL.UnitOfWork;
 
 namespace NodeTree.API
 {
@@ -7,10 +13,15 @@ namespace NodeTree.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddDbContext<NodeTreeDBContext>(
+                options => options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<ITreeNodeService, TreeNodeService>();
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -22,6 +33,8 @@ namespace NodeTree.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseExceptionHandler();
 
             app.UseHttpsRedirection();
 

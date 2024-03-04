@@ -10,6 +10,6 @@
 
         public TreeNode? ParentNode { get; set; }
 
-        public ICollection<TreeNode> Children { get; } = new List<TreeNode>();
+        public ICollection<TreeNode> Children { get; } = new HashSet<TreeNode>();
     }
 }

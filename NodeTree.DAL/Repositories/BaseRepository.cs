@@ -2,6 +2,7 @@
 using NodeTree.DAL.Contexts;
 using NodeTree.DAL.Entities;
 using NodeTree.DAL.Repositories.Interfaces;
+using System.Linq.Expressions;
 
 namespace NodeTree.DAL.Repositories
 {
@@ -19,5 +20,8 @@ namespace NodeTree.DAL.Repositories
 
         public void Delete(TEntity entity) 
             => _dbSet.Remove(entity);
+
+        public IQueryable<TEntity> GetByCondition(Expression<Func<TEntity, bool>> expression)
+            => _dbSet.Where(expression);
     }
 }
