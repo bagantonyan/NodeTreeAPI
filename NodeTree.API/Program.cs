@@ -1,6 +1,8 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NodeTree.API.Handlers;
 using NodeTree.API.Mappings;
+using NodeTree.API.ModelValidations.TreeNode;
 using NodeTree.BLL.Mappings;
 using NodeTree.BLL.Services;
 using NodeTree.BLL.Services.Interfaces;
@@ -32,6 +34,9 @@ namespace NodeTree.API
             });
 
             builder.Services.AddControllers();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateNodeRequestModelValidator>();
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

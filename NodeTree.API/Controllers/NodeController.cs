@@ -7,7 +7,6 @@ using NodeTree.BLL.Services.Interfaces;
 namespace NodeTree.API.Controllers
 {
     [ApiController]
-    [Route("/api.user.tree.node.")]
     public class NodeController : ControllerBase
     {
         private readonly ITreeNodeService _treeNodeService;
@@ -22,7 +21,7 @@ namespace NodeTree.API.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
+        [Route("/api.user.tree.node.create")]
         public async Task<IActionResult> CreateAsync([FromQuery] CreateNodeRequestModel requestModel)
         {
             await _treeNodeService.CreateAsync(_mapper.Map<CreateNodeRequestDTO>(requestModel));
@@ -31,7 +30,7 @@ namespace NodeTree.API.Controllers
         }
 
         [HttpPost]
-        [Route("delete")]
+        [Route("/api.user.tree.node.delete")]
         public async Task<IActionResult> DeleteAsync([FromQuery] DeleteNodeRequestModel requestModel)
         {
             await _treeNodeService.DeleteAsync(_mapper.Map<DeleteNodeRequestDTO>(requestModel));
@@ -40,7 +39,7 @@ namespace NodeTree.API.Controllers
         }
 
         [HttpPost]
-        [Route("rename")]
+        [Route("/api.user.tree.node.rename")]
         public async Task<IActionResult> RenameAsync([FromQuery] RenameNodeRequestModel requestModel)
         {
             await _treeNodeService.RenameAsync(_mapper.Map<RenameNodeRequestDTO>(requestModel));

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using NodeTree.API.Models.TreeNode;
 using NodeTree.BLL.Services.Interfaces;
-using NodeTree.DAL.Entities;
 
 namespace NodeTree.API.Controllers
 {
@@ -22,9 +21,9 @@ namespace NodeTree.API.Controllers
 
         [HttpPost]
         [Route("/api.user.tree.get")]
-        public async Task<ActionResult<TreeResponseModel>> GetAsync(string treeName)
+        public async Task<ActionResult<TreeResponseModel>> GetAsync([FromQuery] GetTreeRequestModel requestModel)
         {
-            var treeDTO = await _treeNodeService.GetTreeAsync(treeName);
+            var treeDTO = await _treeNodeService.GetTreeAsync(requestModel.TreeName);
 
             return Ok(_mapper.Map<TreeResponseModel>(treeDTO));
         }

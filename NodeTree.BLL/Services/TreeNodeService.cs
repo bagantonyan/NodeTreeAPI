@@ -48,7 +48,7 @@ namespace NodeTree.BLL.Services
                 .GetByIdAsync(requestDTO.NodeId, trackChanges: true, includeChildren: true);
 
             if (treeNode.Children.Count > 0)
-                throw new SecureException("You have to delete all children nodes first");
+                throw new DeleteNodeException();
 
             _unitOfWork.TreeNodeRepository.Delete(treeNode);
 
@@ -75,18 +75,18 @@ namespace NodeTree.BLL.Services
             var treeNode = await _unitOfWork.TreeNodeRepository.GetByIdAsync(nodeId);
 
             if (treeNode == null)
-                throw new SecureException($"Node with ID = {nodeId} was not found");
+                throw new NotFoundNodeException(nodeId);
 
             var rootNode = await _unitOfWork.TreeNodeRepository.GetRootNodeByNameAsync(treeName);
 
             if (rootNode == null)
-                throw new SecureException($"Requested node was found, but it doesn't belong to your tree");
+                throw new WrongTreeException();
             else
             {
                 var treeNodes = await _unitOfWork.TreeNodeRepository.GetTreeNodesAsync(treeName);
 
                 if (!treeNodes.Any(n => n.Id == nodeId))
-                    throw new SecureException($"Requested node was found, but it doesn't belong to your tree");
+                    throw new WrongTreeException();
             }
         }
 
@@ -95,7 +95,7 @@ namespace NodeTree.BLL.Services
             var siblingNodes = await _unitOfWork.TreeNodeRepository.GetByIdAsync(parentNodeId, includeChildren: true);
 
             if (siblingNodes.Children.Select(n => n.Name).ToHashSet().Contains(nodeName))
-                throw new SecureException($"Duplicate name");
+                throw new DuplicateNameException();
         }
     }
 }
