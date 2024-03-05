@@ -11,6 +11,27 @@ namespace NodeTree.DAL.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence(
+                name: "EventId",
+                startValue: 638120603191189744L);
+
+            migrationBuilder.CreateTable(
+                name: "JournalRecords",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EventId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR EventId"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JournalRecords", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "TreeNodes",
                 columns: table => new
@@ -35,6 +56,12 @@ namespace NodeTree.DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_JournalRecords_EventId",
+                table: "JournalRecords",
+                column: "EventId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TreeNodes_ParentNodeId",
                 table: "TreeNodes",
                 column: "ParentNodeId");
@@ -44,7 +71,13 @@ namespace NodeTree.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "JournalRecords");
+
+            migrationBuilder.DropTable(
                 name: "TreeNodes");
+
+            migrationBuilder.DropSequence(
+                name: "EventId");
         }
     }
 }

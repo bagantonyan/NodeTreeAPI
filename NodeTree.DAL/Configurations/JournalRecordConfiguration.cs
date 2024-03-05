@@ -10,7 +10,10 @@ namespace NodeTree.DAL.Configurations
         {
             base.Configure(builder);
 
-            builder.HasKey(x => x.Id);
+            builder.HasKey(p => p.Id);
+
+            builder.HasIndex(p => p.EventId)
+                .IsUnique();
 
             builder.Property(p => p.EventId)
                 .HasDefaultValueSql("NEXT VALUE FOR EventId")

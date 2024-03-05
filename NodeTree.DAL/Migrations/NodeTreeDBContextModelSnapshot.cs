@@ -22,7 +22,8 @@ namespace NodeTree.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.HasSequence("EventId");
+            modelBuilder.HasSequence("EventId")
+                .StartsAt(638120603191189744L);
 
             modelBuilder.Entity("NodeTree.DAL.Entities.JournalRecord", b =>
                 {
@@ -51,6 +52,9 @@ namespace NodeTree.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId")
+                        .IsUnique();
 
                     b.ToTable("JournalRecords");
                 });

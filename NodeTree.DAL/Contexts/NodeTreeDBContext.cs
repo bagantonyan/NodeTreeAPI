@@ -13,7 +13,8 @@ namespace NodeTree.DAL.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasSequence<long>("EventId");
+            modelBuilder.HasSequence<long>("EventId")
+                .StartsAt(638120603191189744);
 
             modelBuilder.ApplyConfiguration(new TreeNodeConfiguration());
             modelBuilder.ApplyConfiguration(new JournalRecordConfiguration());

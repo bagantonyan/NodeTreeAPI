@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NodeTree.API.Handlers;
+using NodeTree.API.Mappings;
+using NodeTree.BLL.Mappings;
 using NodeTree.BLL.Services;
 using NodeTree.BLL.Services.Interfaces;
 using NodeTree.DAL.Contexts;
@@ -21,6 +23,14 @@ namespace NodeTree.API
             builder.Services.AddProblemDetails();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<ITreeNodeService, TreeNodeService>();
+            builder.Services.AddScoped<IJournalRecordService, JournalRecordService>();
+
+            builder.Services.AddAutoMapper(config =>
+            {
+                config.AddProfile<ApiMappingProfile>();
+                config.AddProfile<BLLMappingProfile>();
+            });
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -40,8 +50,11 @@ namespace NodeTree.API
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            //app.MapControllerRoute(
+            //    name: "default",
+            //    pattern: "{controller}.{action}/{id?}");
 
             app.Run();
         }

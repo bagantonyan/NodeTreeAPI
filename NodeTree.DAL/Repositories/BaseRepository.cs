@@ -21,7 +21,9 @@ namespace NodeTree.DAL.Repositories
         public void Delete(TEntity entity) 
             => _dbSet.Remove(entity);
 
-        public IQueryable<TEntity> GetByCondition(Expression<Func<TEntity, bool>> expression)
-            => _dbSet.Where(expression);
+        public IQueryable<TEntity> GetByCondition(Expression<Func<TEntity, bool>> expression, bool trackChanges = false)
+            => trackChanges ? 
+            _dbSet.Where(expression) :
+            _dbSet.Where(expression).AsNoTrackingWithIdentityResolution();
     }
 }

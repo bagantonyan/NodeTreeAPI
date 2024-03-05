@@ -5,6 +5,9 @@ namespace NodeTree.DAL.UnitOfWork
     public interface IUnitOfWork : IDisposable
     {
         ITreeNodeRepository TreeNodeRepository { get; }
+
+        IJournalRecordRepository JournalRecordRepository { get; }
+
         Task SaveChangesAsync();
     }
 }

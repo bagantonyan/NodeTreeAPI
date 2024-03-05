@@ -4,11 +4,9 @@ namespace NodeTree.DAL.Repositories.Interfaces
 {
     public interface ITreeNodeRepository : IBaseRepository<TreeNode>
     {
-        Task<TreeNode> GetByIdAsync(int treeNodeId);
+        Task<TreeNode> GetByIdAsync(int treeNodeId, bool trackChanges = false, bool includeChildren = false);
 
         Task<TreeNode> GetRootNodeByNameAsync(string rootName);
-
-        Task<IEnumerable<TreeNode>> GetChildrenNodes(int parentNodeId);
 
         Task<IEnumerable<TreeNode>> GetTreeNodesAsync(string rootName);
     }

@@ -10,21 +10,19 @@ namespace NodeTree.DAL.Repositories
     {
         public TreeNodeRepository(NodeTreeDBContext dbContext) : base(dbContext) { }
 
-        public async Task<TreeNode> GetByIdAsync(int treeNodeId)
-            => await GetByCondition(n => n.Id == treeNodeId)
-            .AsNoTrackingWithIdentityResolution()
-            .SingleOrDefaultAsync();
+        public async Task<TreeNode> GetByIdAsync(int treeNodeId, bool trackChanges = false, bool includeChildren = false)
+        {
+            var query = includeChildren ?
+                GetByCondition(n => n.Id == treeNodeId, trackChanges).Include(n => n.Children) :
+                GetByCondition(n => n.Id == treeNodeId, trackChanges);
+
+            return await query.SingleOrDefaultAsync();
+        }
 
         public async Task<TreeNode> GetRootNodeByNameAsync(string rootName)
             => await GetByCondition(n => n.Name == rootName && n.ParentNodeId == null)
             .AsNoTrackingWithIdentityResolution()
             .SingleOrDefaultAsync();
-
-        public async Task<IEnumerable<TreeNode>> GetChildrenNodes(int parentNodeId)
-            => await GetByCondition(n => n.Id == parentNodeId)
-            .AsNoTrackingWithIdentityResolution()
-            .Include(n => n.Children)
-            .ToListAsync();
 
         public async Task<IEnumerable<TreeNode>> GetTreeNodesAsync(string rootName)
             => await _dbSet.FromSqlRaw($"[dbo].[spGetNodeTree] @rootName", new SqlParameter("@rootName", rootName))

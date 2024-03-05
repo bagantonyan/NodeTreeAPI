@@ -1,6 +1,6 @@
-﻿namespace NodeTree.BLL.DTOs.TreeNodes
+﻿namespace NodeTree.API.Models.TreeNode
 {
-    public class CreateTreeNodeRequestDTO
+    public class CreateNodeRequestModel
     {
         public string TreeName { get; set; }
 

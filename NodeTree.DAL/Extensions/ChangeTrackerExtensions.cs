@@ -23,7 +23,7 @@ namespace NodeTree.DAL.Extensions
                 {
                     case EntityState.Added:
                         {
-                            ((BaseEntity)entity.Entity).ModifiedDate = DateTime.UtcNow;
+                            ((BaseEntity)entity.Entity).CreatedDate = DateTime.UtcNow;
                             break;
                         }
                     case EntityState.Deleted:

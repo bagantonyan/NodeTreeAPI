@@ -12,7 +12,7 @@ using NodeTree.DAL.Contexts;
 namespace NodeTree.DAL.Migrations
 {
     [DbContext(typeof(NodeTreeDBContext))]
-    [Migration("20240304143625_sp_GetNodeTree")]
+    [Migration("20240304192058_sp_GetNodeTree")]
     partial class sp_GetNodeTree
     {
         /// <inheritdoc />
@@ -24,6 +24,43 @@ namespace NodeTree.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.HasSequence("EventId")
+                .StartsAt(638120603191189744L);
+
+            modelBuilder.Entity("NodeTree.DAL.Entities.JournalRecord", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("NEXT VALUE FOR EventId");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId")
+                        .IsUnique();
+
+                    b.ToTable("JournalRecords");
+                });
 
             modelBuilder.Entity("NodeTree.DAL.Entities.TreeNode", b =>
                 {
