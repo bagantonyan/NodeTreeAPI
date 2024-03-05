@@ -21,7 +21,7 @@ namespace NodeTree.API.Controllers
 
         [HttpPost]
         [Route("/api.user.tree.get")]
-        public async Task<ActionResult<TreeResponseModel>> GetAsync([FromQuery] GetTreeRequestModel requestModel)
+        public async Task<ActionResult<TreeResponseModel>> GetTreeAsync([FromQuery] GetTreeRequestModel requestModel)
         {
             var treeDTO = await _treeNodeService.GetTreeAsync(requestModel.TreeName);
 

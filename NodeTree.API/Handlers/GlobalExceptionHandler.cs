@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using NodeTree.API.Helpers;
 using NodeTree.API.Models.ApiModels;
 using NodeTree.BLL.Services.Interfaces;
 using NodeTree.DAL.Entities;
@@ -14,12 +15,29 @@ namespace NodeTree.API.Handlers
             Exception exception, 
             CancellationToken cancellationToken)
         {
-            var _journalRecordService = httpContext.RequestServices.GetRequiredService<IJournalRecordService>();
-            var test = new JournalRecord { Text = exception.Message };
-
-            await _journalRecordService.CreateAsync(test);
-
             ApiErrorResponse errorResponse;
+            var journalRecord = new JournalRecord();
+
+            try
+            {
+                var _journalRecordService = httpContext.RequestServices.GetRequiredService<IJournalRecordService>();
+                await _journalRecordService.CreateAsync(journalRecord);
+
+                var parameters = httpContext.Request.Query.ToDictionary();
+
+                journalRecord.Text = JournalTextHelper
+                    .GetRecordText(journalRecord.EventId, httpContext.Request.Path, parameters, exception.StackTrace);
+                await _journalRecordService.UpdateAsync(journalRecord);
+            }
+            catch (Exception)
+            {
+                errorResponse = new ApiErrorResponse
+                {
+                    Type = ExceptionType.Exception.ToString(),
+                    Id = journalRecord.EventId.ToString(),
+                    Data = new Data { Message = $"Internal server error ID = {journalRecord.EventId}" }
+                };
+            }
 
             switch (exception)
             {
@@ -28,7 +46,7 @@ namespace NodeTree.API.Handlers
                         errorResponse = new ApiErrorResponse
                         {
                             Type = ExceptionType.Secure.ToString(),
-                            Id = test.EventId.ToString(),
+                            Id = journalRecord.EventId.ToString(),
                             Data = new Data { Message = exception.Message }
                         };
                         break;
@@ -38,8 +56,8 @@ namespace NodeTree.API.Handlers
                         errorResponse = new ApiErrorResponse
                         {
                             Type = ExceptionType.Exception.ToString(),
-                            Id = test.EventId.ToString(),
-                            Data = new Data { Message = $"Internal server error ID = {httpContext.TraceIdentifier}" }
+                            Id = journalRecord.EventId.ToString(),
+                            Data = new Data { Message = $"Internal server error ID = {journalRecord.EventId}" }
                         };
                         break;
                     }

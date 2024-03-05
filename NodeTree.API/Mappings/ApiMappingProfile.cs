@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using NodeTree.API.Models.Journal;
 using NodeTree.API.Models.TreeNode;
+using NodeTree.BLL.DTOs.JournalRecords;
 using NodeTree.BLL.DTOs.TreeNodes;
 
 namespace NodeTree.API.Mappings
@@ -13,6 +15,8 @@ namespace NodeTree.API.Mappings
             CreateMap<RenameNodeRequestModel, RenameNodeRequestDTO>();
 
             CreateMap<TreeResponseDTO, TreeResponseModel>();
+
+            CreateMap<JournalRecordDTO, JournalRecordResponseModel>();
         }
     }
 }

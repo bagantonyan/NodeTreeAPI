@@ -20,7 +20,7 @@ namespace NodeTree.DAL.Configurations
                 .IsRequired(true);
 
             builder.Property(p => p.Text)
-                .IsRequired(true);
+                .IsRequired(false);
         }
     }
 }
