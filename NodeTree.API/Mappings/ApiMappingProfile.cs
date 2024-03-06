@@ -17,6 +17,7 @@ namespace NodeTree.API.Mappings
             CreateMap<TreeResponseDTO, TreeResponseModel>();
 
             CreateMap<JournalRecordDTO, JournalRecordResponseModel>();
+            CreateMap<JournalRecordDTO, JournalItemResponseModel>();
         }
     }
 }

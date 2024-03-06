@@ -5,6 +5,7 @@ using NodeTree.BLL.Services.Interfaces;
 
 namespace NodeTree.API.Controllers
 {
+    [Tags("user.tree")]
     [ApiController]
     public class TreeController : ControllerBase
     {
@@ -19,6 +20,14 @@ namespace NodeTree.API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// Returns your entire tree. If your tree doesn't exist it will be created automatically.
+        /// </remarks>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("/api.user.tree.get")]
         public async Task<ActionResult<TreeResponseModel>> GetTreeAsync([FromQuery] GetTreeRequestModel requestModel)

@@ -6,6 +6,7 @@ using NodeTree.BLL.Services.Interfaces;
 
 namespace NodeTree.API.Controllers
 {
+    [Tags("user.tree.node")]
     [ApiController]
     public class NodeController : ControllerBase
     {
@@ -20,6 +21,16 @@ namespace NodeTree.API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <remarks>
+        /// Create a new node in your tree. 
+        /// You must to specify a parent node ID that belongs to your tree. 
+        /// A new node name must be unique across all siblings.
+        /// </remarks>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("/api.user.tree.node.create")]
         public async Task<IActionResult> CreateAsync([FromQuery] CreateNodeRequestModel requestModel)
@@ -29,6 +40,15 @@ namespace NodeTree.API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// Delete an existing node in your tree. 
+        /// You must specify a node ID that belongs your tree.
+        /// </remarks>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("/api.user.tree.node.delete")]
         public async Task<IActionResult> DeleteAsync([FromQuery] DeleteNodeRequestModel requestModel)
@@ -38,6 +58,16 @@ namespace NodeTree.API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// Rename an existing node in your tree. 
+        /// You must specify a node ID that belongs your tree. 
+        /// A new name of the node must be unique across all siblings.
+        /// </remarks>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("/api.user.tree.node.rename")]
         public async Task<IActionResult> RenameAsync([FromQuery] RenameNodeRequestModel requestModel)

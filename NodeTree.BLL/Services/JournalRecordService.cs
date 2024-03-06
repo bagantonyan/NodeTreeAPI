@@ -4,6 +4,7 @@ using NodeTree.BLL.Services.Interfaces;
 using NodeTree.DAL.Entities;
 using NodeTree.DAL.UnitOfWork;
 using NodeTree.Shared.Exceptions;
+using NodeTree.Shared.RequestFeatures;
 
 namespace NodeTree.BLL.Services
 {
@@ -28,6 +29,13 @@ namespace NodeTree.BLL.Services
                 throw new NotFoundRecordException();
 
             return _mapper.Map<JournalRecordDTO>(record);
+        }
+
+        public async Task<(IEnumerable<JournalRecordDTO>, long)> GetRangeWithPagingAndFilterAsync(PagingModel paging, FilterModel filter)
+        {
+            var (records, totalCount) = await _unitOfWork.JournalRecordRepository.GetRangeWithPagingAndFilterAsync(paging, filter);
+
+            return (_mapper.Map<IEnumerable<JournalRecordDTO>>(records), totalCount);
         }
 
         public async Task CreateAsync(JournalRecord journalRecord)
