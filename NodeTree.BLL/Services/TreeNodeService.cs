@@ -22,6 +22,19 @@ namespace NodeTree.BLL.Services
 
         public async Task<TreeResponseDTO> GetTreeAsync(string treeName)
         {
+            var rootNode = await _unitOfWork.TreeNodeRepository.GetRootNodeByNameAsync(treeName);
+
+            if (rootNode == null)
+            {
+                var newRootNode = new TreeNode { Name =  treeName };
+
+                _unitOfWork.TreeNodeRepository.Create(newRootNode);
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return _mapper.Map<TreeResponseDTO>(newRootNode);
+            }
+
             var treeNodes = await _unitOfWork.TreeNodeRepository.GetTreeNodesAsync(treeName);
 
             var nodeTree = treeNodes.Where(n => n.Name == treeName && n.ParentNodeId == null).SingleOrDefault();

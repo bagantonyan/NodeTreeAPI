@@ -8,7 +8,7 @@ namespace NodeTree.API.Helpers
         {
             return $"Request ID = {requestId}\r\n" +
                    $"Path = {path}\r\n" +
-                   parameters.Select(x => string.Format("{0}{1}{2}", x.Key, " = ", x.Value + "\r\n")) +
+                   string.Join("\r\n", parameters.Select(x => string.Format("{0}{1}{2}", x.Key, " = ", x.Value))) + "\r\n" +
                    stackTrace;
         }
     }

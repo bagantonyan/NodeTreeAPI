@@ -46,12 +46,9 @@ namespace NodeTree.API
                 options.Filters.Add(new ProducesAttribute("application/json"));
             });
 
-            builder.Services.AddValidatorsFromAssemblyContaining<CreateNodeRequestModelValidator>();
-
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateNodeRequestModelValidator>();
             builder.Services.AddFluentValidationAutoValidation();
 
             builder.Services.AddCors(options =>
@@ -76,6 +73,8 @@ namespace NodeTree.API
                         Url = new Uri("https://github.com/bagantonyan")
                     }
                 });
+
+                configs.EnableAnnotations();
 
                 var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 configs.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName), true);
@@ -102,10 +101,6 @@ namespace NodeTree.API
             app.UseCors("CorsPolicy");
 
             app.MapControllers();
-
-            //app.MapControllerRoute(
-            //    name: "default",
-            //    pattern: "{controller}.{action}/{id?}");
 
             app.Run();
         }
