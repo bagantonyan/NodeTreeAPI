@@ -13,7 +13,7 @@ namespace NodeTree.DAL.Configurations
             builder.HasKey(p => p.Id);
 
             builder.HasIndex(p => p.EventId)
-                .IsUnique();
+                .IsUnique(true);
 
             builder.Property(p => p.EventId)
                 .HasDefaultValueSql("NEXT VALUE FOR EventId")

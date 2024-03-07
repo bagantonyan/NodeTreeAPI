@@ -10,7 +10,7 @@ namespace NodeTree.DAL.Configurations
         {
             base.Configure(builder);
 
-            builder.HasKey(x => x.Id);
+            builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Name)
                 .HasMaxLength(256)
@@ -21,6 +21,9 @@ namespace NodeTree.DAL.Configurations
                 .HasForeignKey(p => p.ParentNodeId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(p => p.Name)
+                .IsUnique(false);
         }
     }
 }

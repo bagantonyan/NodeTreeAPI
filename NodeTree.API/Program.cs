@@ -3,7 +3,7 @@ using FluentValidation.AspNetCore;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using NodeTree.API.Extensions;
 using NodeTree.API.Handlers;
 using NodeTree.API.Mappings;
 using NodeTree.API.Models.ApiModels;
@@ -13,13 +13,12 @@ using NodeTree.BLL.Services;
 using NodeTree.BLL.Services.Interfaces;
 using NodeTree.DAL.Contexts;
 using NodeTree.DAL.UnitOfWork;
-using System.Reflection;
 
 namespace NodeTree.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +28,7 @@ namespace NodeTree.API
 
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<ITreeNodeService, TreeNodeService>();
             builder.Services.AddScoped<IJournalRecordService, JournalRecordService>();
@@ -60,38 +60,15 @@ namespace NodeTree.API
                     .AllowAnyHeader());
             });
 
-            builder.Services.AddSwaggerGen(configs =>
-            {
-                configs.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "NodeTree API",
-                    Version = "v1",
-                    Description = "An API for working with tree of nodes and with journal of exceptions",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Bagrat Antonyan - Github",
-                        Url = new Uri("https://github.com/bagantonyan")
-                    }
-                });
-
-                configs.EnableAnnotations();
-
-                var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                configs.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName), true);
-            });
+            builder.Services.AddSwagger();
 
             builder.Services.AddFluentValidationRulesToSwagger();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI(configs =>
-                {
-                    configs.SwaggerEndpoint("/swagger/v1/swagger.json", "NodeTree API V1");
-                });
+                app.AddSwagger();
             }
 
             app.UseExceptionHandler();
@@ -99,6 +76,8 @@ namespace NodeTree.API
             app.UseHttpsRedirection();
 
             app.UseCors("CorsPolicy");
+
+            await app.MigrateDatabaseAsync();
 
             app.MapControllers();
 

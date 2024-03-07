@@ -30,11 +30,9 @@ namespace NodeTree.DAL.Repositories
             if (filter.To != default)
                 query = query.Where(r => r.CreatedDate < filter.To);
 
-            query = _dbSet
-                .Skip(paging.Skip)
-                .Take(paging.Take);
-
             return (await query
+                .Skip(paging.Skip)
+                .Take(paging.Take)
                 .Select(r => new JournalRecord 
                 { 
                     Id = r.Id, 

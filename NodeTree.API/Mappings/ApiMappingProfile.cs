@@ -17,7 +17,8 @@ namespace NodeTree.API.Mappings
             CreateMap<TreeResponseDTO, TreeResponseModel>();
 
             CreateMap<JournalRecordDTO, JournalRecordResponseModel>();
-            CreateMap<JournalRecordDTO, JournalItemResponseModel>();
+            CreateMap<JournalRecordDTO, JournalItemResponseModel>()
+                .ForMember(dst => dst.EventId, options => options.MapFrom(src => src.EventId.ToString()));
         }
     }
 }

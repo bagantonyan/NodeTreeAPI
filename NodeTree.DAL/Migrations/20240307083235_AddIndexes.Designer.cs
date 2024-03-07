@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodeTree.DAL.Contexts;
 
@@ -11,9 +12,11 @@ using NodeTree.DAL.Contexts;
 namespace NodeTree.DAL.Migrations
 {
     [DbContext(typeof(NodeTreeDBContext))]
-    partial class NodeTreeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240307083235_AddIndexes")]
+    partial class AddIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
