@@ -37,6 +37,12 @@ namespace NodeTree.API.Handlers
                     Id = journalRecord.EventId.ToString(),
                     Data = new Data { Message = $"Internal server error ID = {journalRecord.EventId}" }
                 };
+
+                httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+                await httpContext.Response.WriteAsJsonAsync(errorResponse, cancellationToken);
+
+                return true;
             }
 
             switch (exception)
